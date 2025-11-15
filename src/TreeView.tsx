@@ -1,23 +1,14 @@
 import Tree, { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree";
-
-import { BinarySearchTree } from "utilities-library";
 import { BinaryTreeNode } from "utilities-library";
 
-const t1 = new BinarySearchTree<number>();
-t1.insert({ key: 4, value: 1 })
-  .insert({ key: 2, value: 2 })
-  .insert({ key: 6, value: 3 })
-  .insert({ key: 1, value: 4 })
-  .insert({ key: 3, value: 5 })
-  .insert({ key: 5, value: 6 })
-  .insert({ key: 7, value: 7 });
+import { tree } from "./tree/bst";
 
 const bstToD3Tree = <T,>(
   node: BinaryTreeNode<T> | null,
 ): RawNodeDatum | undefined => {
   if (!node?.getData() || node.getData().key === null) return;
   return {
-    name: `${node.getData().key}`,
+    name: node.getData().key.toString(),
     children: [
       bstToD3Tree(node.getLeft()),
       bstToD3Tree(node.getRight()),
@@ -25,9 +16,18 @@ const bstToD3Tree = <T,>(
   } as RawNodeDatum;
 };
 
-const d3TreeData = bstToD3Tree(t1.getRoot());
+const d3TreeData = bstToD3Tree(tree.getRoot());
+// const d3TreeData: RawNodeDatum | RawNodeDatum[] | undefined = {
+//   name: "",
+//   children: [],
+// };
 
-function Node({ nodeDatum, toggleNode, onNodeClick }: CustomNodeElementProps) {
+function NodeView({
+  nodeDatum,
+  toggleNode,
+  onNodeClick,
+}: CustomNodeElementProps) {
+  if (!nodeDatum.name) return null!; // no renderiza nodos vacíos
   return (
     <g
       onClick={(e) => {
@@ -35,7 +35,7 @@ function Node({ nodeDatum, toggleNode, onNodeClick }: CustomNodeElementProps) {
         onNodeClick(e);
       }}
     >
-      <circle r={40} fill="white" stroke="black" strokeWidth={2} />
+      <circle r={30} fill="white" stroke="black" strokeWidth={2} />
       <text
         className="fill-black font-serif text-xs"
         textAnchor="middle"
@@ -53,8 +53,7 @@ export default function TreeView() {
     <Tree
       data={d3TreeData}
       orientation="vertical"
-      onNodeClick={() => console.warn("Node clicked")}
-      renderCustomNodeElement={Node}
+      renderCustomNodeElement={NodeView}
       translate={{
         x: window.innerWidth / 2,
         y: window.innerHeight / 3,

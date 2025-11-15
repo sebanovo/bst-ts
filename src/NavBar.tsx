@@ -1,30 +1,88 @@
 import "./index.css";
 import { useState } from "react";
+import {
+  altura,
+  cardinalidad,
+  contarHijosDerechos,
+  contarHijosIzquierdos,
+  estaVacio,
+  inOrder,
+  insertar,
+  levelOrder,
+  maximo,
+  minimo,
+  mostrar,
+  postOrder,
+  preOrder,
+  tamanio,
+  tieneClave,
+} from "./methods";
 
 const menuItems = [
   {
-    title: "Menu1",
+    title: "Menu 1",
     items: [
-      "estaVacio",
-      "cardinalidad",
-      "tamaño",
-      "altura",
-      "minimo",
-      "maximo",
-      "tieneClave",
-      "levelOrder",
-      "preOrder",
-      "inOrder",
-      "postOrder",
-      "construirPreOrdenAInOrden",
-      "construirPostOrdenAInOrden",
-      "contarHijosIzquierdos",
-      "contarHijosDerechos",
-      "todosLosNodosTienen2Hijos (nivel)",
-      "contarCantidadNodos (nivel)",
-      "insertar",
-      "eliminar",
-      "mostrar",
+      {
+        text: "estaVacio",
+        fn: estaVacio,
+      },
+      {
+        text: "cardinalidad",
+        fn: cardinalidad,
+      },
+      {
+        text: "tamaño",
+        fn: tamanio,
+      },
+      {
+        text: "altura",
+        fn: altura,
+      },
+      {
+        text: "minimo",
+        fn: minimo,
+      },
+      {
+        text: "maximo",
+        fn: maximo,
+      },
+      {
+        text: "tieneClave",
+        fn: tieneClave,
+      },
+      {
+        text: "levelOrder",
+        fn: levelOrder,
+      },
+
+      {
+        text: "preOrder",
+        fn: preOrder,
+      },
+      {
+        text: "inOrder",
+        fn: inOrder,
+      },
+      {
+        text: "postOrder",
+        fn: postOrder,
+      },
+      {
+        text: "contarHijosIzquierdos",
+        fn: contarHijosIzquierdos,
+      },
+      {
+        text: "contarHijosDerechos",
+        fn: contarHijosDerechos,
+      },
+      {
+        text: "insertar",
+        fn: insertar,
+      },
+      {
+        text: "mostrar",
+        fn: mostrar,
+      },
     ],
   },
 ];
@@ -81,12 +139,13 @@ export function NavBar(): JSX.Element {
               onMouseEnter={handleSubMenuEnter}
               onMouseLeave={handleMenuLeave}
             >
-              {menu.items.map((sub) => (
+              {menu.items.map((sub, index) => (
                 <li
-                  key={sub}
+                  key={index}
+                  onClick={sub.fn}
                   className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-blue-50 hover:text-blue-600"
                 >
-                  {sub}
+                  {sub.text}
                 </li>
               ))}
             </ul>
