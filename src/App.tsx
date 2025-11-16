@@ -1,12 +1,11 @@
-import TreeView from "./TreeView";
-import { NavBar } from "./NavBar";
+import TreeView from "./components/TreeView";
+import { NavBar } from "./components/NavBar";
 import "./index.css";
-import "./tree/bst";
 
 function App() {
   return (
     <div className="h-screen w-full">
-      <NavBar></NavBar>
+      <NavBar />
       <TreeView />
     </div>
   );

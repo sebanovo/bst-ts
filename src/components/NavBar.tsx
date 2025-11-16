@@ -1,95 +1,27 @@
-import "./index.css";
 import { useState } from "react";
-import {
-  altura,
-  cardinalidad,
-  contarHijosDerechos,
-  contarHijosIzquierdos,
-  estaVacio,
-  inOrder,
-  insertar,
-  levelOrder,
-  maximo,
-  minimo,
-  mostrar,
-  postOrder,
-  preOrder,
-  tamanio,
-  tieneClave,
-} from "./methods";
 
-const menuItems = [
-  {
-    title: "Menu 1",
-    items: [
-      {
-        text: "estaVacio",
-        fn: estaVacio,
-      },
-      {
-        text: "cardinalidad",
-        fn: cardinalidad,
-      },
-      {
-        text: "tamaño",
-        fn: tamanio,
-      },
-      {
-        text: "altura",
-        fn: altura,
-      },
-      {
-        text: "minimo",
-        fn: minimo,
-      },
-      {
-        text: "maximo",
-        fn: maximo,
-      },
-      {
-        text: "tieneClave",
-        fn: tieneClave,
-      },
-      {
-        text: "levelOrder",
-        fn: levelOrder,
-      },
-
-      {
-        text: "preOrder",
-        fn: preOrder,
-      },
-      {
-        text: "inOrder",
-        fn: inOrder,
-      },
-      {
-        text: "postOrder",
-        fn: postOrder,
-      },
-      {
-        text: "contarHijosIzquierdos",
-        fn: contarHijosIzquierdos,
-      },
-      {
-        text: "contarHijosDerechos",
-        fn: contarHijosDerechos,
-      },
-      {
-        text: "insertar",
-        fn: insertar,
-      },
-      {
-        text: "mostrar",
-        fn: mostrar,
-      },
-    ],
-  },
-];
+import { useTreeStore } from "../store/treeStore";
+import { promptSwal } from "../utils/swalAlert";
+import { menuItems } from "../constants/menuItems";
 
 export function NavBar(): JSX.Element {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const insert = useTreeStore((state) => state.insert);
+  const remove = useTreeStore((state) => state.remove);
+  const items = menuItems[0].items;
+  const insertarIndex = items.findIndex((value) => value.text === "insertar");
+  const eliminarIndex = items.findIndex((value) => value.text === "eliminar");
+  items[insertarIndex].fn = async () => {
+    const result = await promptSwal("numero");
+    if (!result.isConfirmed) return;
+    insert(parseInt(result.value));
+  };
+  items[eliminarIndex].fn = async () => {
+    const result = await promptSwal("numero");
+    if (!result.isConfirmed) return;
+    remove(parseInt(result.value));
+  };
 
   const handleMenuEnter = (menuTitle: string) => {
     if (closeTimeout) {
@@ -102,7 +34,7 @@ export function NavBar(): JSX.Element {
   const handleMenuLeave = () => {
     const timeout = setTimeout(() => {
       setActiveMenu(null);
-    }, 200); // 200ms de delay antes de cerrar
+    }, 200);
     setCloseTimeout(timeout);
   };
 

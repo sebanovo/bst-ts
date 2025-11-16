@@ -1,4 +1,4 @@
-import { tree } from "./tree/bst";
+import { tree } from "../store/treeStore";
 import { messageSwal, promptSwal } from "./swalAlert";
 
 export const estaVacio = () => {
@@ -84,15 +84,29 @@ export const contarHijosDerechos = () => {
   messageSwal(tree.countRightChildren().toString());
 };
 
-// "todosLosNodosTienen2Hijos (nivel)",
-// "contarCantidadNodos (nivel)",
-// "insertar",
+export const todosLosNodosTienen2Hijos = async () => {
+  const nivel = await promptSwal("nivel");
+  messageSwal(nivel.value.toString());
+  tree.allNodesHaveTwoChildrenInLevel(parseInt(nivel.value));
+};
+
+export const contarCantidadNodos = async () => {
+  const nivel = await promptSwal("nivel");
+  messageSwal(nivel.value.toString());
+  tree.countNodesInLevel(parseInt(nivel.value));
+};
+
 export const insertar = async () => {
   const numero = await promptSwal("numero");
   messageSwal(numero.value.toString());
   tree.insert({ key: parseInt(numero.value), value: 0 });
 };
-// "eliminar",
+
+export const eliminar = async () => {
+  const numero = await promptSwal("numero");
+  messageSwal(numero.value.toString());
+  tree.delete(parseInt(numero.value));
+};
 
 export const mostrar = () => {
   messageSwal(tree.toString());

@@ -1,26 +1,5 @@
-import Tree, { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree";
-import { BinaryTreeNode } from "utilities-library";
-
-import { tree } from "./tree/bst";
-
-const bstToD3Tree = <T,>(
-  node: BinaryTreeNode<T> | null,
-): RawNodeDatum | undefined => {
-  if (!node?.getData() || node.getData().key === null) return;
-  return {
-    name: node.getData().key.toString(),
-    children: [
-      bstToD3Tree(node.getLeft()),
-      bstToD3Tree(node.getRight()),
-    ].filter(Boolean),
-  } as RawNodeDatum;
-};
-
-const d3TreeData = bstToD3Tree(tree.getRoot());
-// const d3TreeData: RawNodeDatum | RawNodeDatum[] | undefined = {
-//   name: "",
-//   children: [],
-// };
+import Tree, { CustomNodeElementProps } from "react-d3-tree";
+import { useTreeStore } from "../store/treeStore";
 
 function NodeView({
   nodeDatum,
@@ -37,7 +16,7 @@ function NodeView({
     >
       <circle r={30} fill="white" stroke="black" strokeWidth={2} />
       <text
-        className="fill-black font-serif text-xs"
+        className="font-serif text-xs"
         textAnchor="middle"
         strokeWidth={1}
         alignmentBaseline="central"
@@ -49,9 +28,16 @@ function NodeView({
 }
 
 export default function TreeView() {
+  const treeData = useTreeStore((state) => state.treeData);
+  if (!treeData)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        No hay árbol
+      </div>
+    );
   return (
     <Tree
-      data={d3TreeData}
+      data={treeData}
       orientation="vertical"
       renderCustomNodeElement={NodeView}
       translate={{
