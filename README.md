@@ -2,10 +2,10 @@
 
 Este proyecto representa un trabajo académico de la universidad en el que desarrollamos una clase Arbol Binario en TypeScript. 
 
-<!-- Visita el proyecto [Clase-Arbol-Binario](https://clase-vector-vanilla-javascript.vercel.app/) -->
+Visita el proyecto [Clase-Arbol-Binario](https://bst-ts-n7yu.vercel.app/)
 
-<!-- <div align="center">
-  <img src="https://i.ibb.co/ZHf6HTz/clase-vector.png" alt="vector-class-javascript">
+<div align="center">
+  <img width="846" height="687" alt="image" src="https://github.com/user-attachments/assets/daef09b8-e980-45df-9231-bb4c07fd1b70" />
 </div> -->
 
 ## Características
