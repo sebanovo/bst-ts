@@ -10,6 +10,14 @@ interface TreeState {
   treeData: RawNodeDatum | undefined;
   insert: (key: number) => void;
   remove: (key: number) => void;
+  rebuildPreInOrder: (
+    pre: { key: number; value: number }[],
+    ino: { key: number; value: number }[],
+  ) => void;
+  rebuildPostInOrder: (
+    pre: { key: number; value: number }[],
+    ino: { key: number; value: number }[],
+  ) => void;
   refresh: () => void;
 }
 
@@ -35,6 +43,32 @@ export const useTreeStore = create<TreeState>((set) => ({
       };
     }),
 
+  rebuildPreInOrder: (
+    pre: { key: number; value: number }[],
+    ino: { key: number; value: number }[],
+  ) =>
+    set((state) => {
+      tree.setRoot(null);
+      tree.rebuildPreOrderInOrder(pre, ino);
+
+      return {
+        version: state.version + 1,
+        treeData: bstToTreeData(tree.getRoot()),
+      };
+    }),
+  rebuildPostInOrder: (
+    pre: { key: number; value: number }[],
+    ino: { key: number; value: number }[],
+  ) =>
+    set((state) => {
+      tree.setRoot(null);
+      tree.rebuildPostOrderInOrder(pre, ino);
+
+      return {
+        version: state.version + 1,
+        treeData: bstToTreeData(tree.getRoot()),
+      };
+    }),
   refresh: () =>
     set((state) => ({
       version: state.version + 1,

@@ -9,18 +9,60 @@ export function NavBar(): JSX.Element {
   const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout | null>(null);
   const insert = useTreeStore((state) => state.insert);
   const remove = useTreeStore((state) => state.remove);
-  const items = menuItems[0].items;
+  const rebuildPreOrderInOrder = useTreeStore(
+    (state) => state.rebuildPreInOrder,
+  );
+  const rebuildPostInOrder = useTreeStore((state) => state.rebuildPostInOrder);
+  const items = menuItems[1].items;
   const insertarIndex = items.findIndex((value) => value.text === "insertar");
   const eliminarIndex = items.findIndex((value) => value.text === "eliminar");
+  const construirPreOrdenInOrdenIndex = items.findIndex(
+    (value) => value.text === "construirPreOrdenInOrden",
+  );
+  const construirPostOrdenInOrdenIndex = items.findIndex(
+    (value) => value.text === "construirPostOrdenInOrden",
+  );
   items[insertarIndex].fn = async () => {
     const result = await promptSwal("numero");
     if (!result.isConfirmed) return;
-    insert(parseInt(result.value));
+    insert(Number(result.value));
   };
   items[eliminarIndex].fn = async () => {
     const result = await promptSwal("numero");
     if (!result.isConfirmed) return;
-    remove(parseInt(result.value));
+    remove(Number(result.value));
+  };
+  const parseList = (str: string) => {
+    return str
+      .replace(/[\\[\]]/g, "")
+      .split(",")
+      .map((number) => {
+        return { key: Number(number), value: 0 };
+      });
+  };
+  items[construirPreOrdenInOrdenIndex].fn = async () => {
+    // example:
+    // Input: inorder[] = [3, 1, 4, 0, 5, 2]
+    // preorder[] = [0, 1, 3, 4, 2, 5]
+    const response1 = await promptSwal("preOrderList");
+    if (!response1.isConfirmed) return;
+    const response2 = await promptSwal("inOrderList");
+    if (!response2.isConfirmed) return;
+    const preOrderList = parseList(response1.value);
+    const inOrderList = parseList(response2.value);
+    rebuildPreOrderInOrder(preOrderList, inOrderList);
+  };
+  items[construirPostOrdenInOrdenIndex].fn = async () => {
+    // example:
+    // Input: inorder[] = [4, 2, 5, 1, 3]
+    // postorder[] = [4, 5, 2, 3, 1]
+    const response1 = await promptSwal("postOrderList");
+    if (!response1.isConfirmed) return;
+    const response2 = await promptSwal("inOrderList");
+    if (!response2.isConfirmed) return;
+    const postOrderList = parseList(response1.value);
+    const inOrderList = parseList(response2.value);
+    rebuildPostInOrder(postOrderList, inOrderList);
   };
 
   const handleMenuEnter = (menuTitle: string) => {
@@ -48,9 +90,9 @@ export function NavBar(): JSX.Element {
   return (
     <nav className="flex h-14 w-full items-center bg-gradient-to-r from-blue-600 to-blue-700 px-6 shadow-md">
       <ul className="flex gap-6 text-white">
-        {menuItems.map((menu) => (
+        {menuItems.map((menu, index) => (
           <li
-            key={menu.title}
+            key={index}
             className="relative cursor-pointer"
             onMouseEnter={() => handleMenuEnter(menu.title)}
             onMouseLeave={handleMenuLeave}
@@ -73,7 +115,7 @@ export function NavBar(): JSX.Element {
             >
               {menu.items.map((sub, index) => (
                 <li
-                  key={index}
+                  key={index + Math.random()}
                   onClick={sub.fn}
                   className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-blue-50 hover:text-blue-600"
                 >

@@ -1,6 +1,8 @@
 import {
   altura,
   cardinalidad,
+  construirPostOrdenInOrden,
+  construirPreOrdenInOrden,
   contarCantidadNodos,
   contarHijosDerechos,
   contarHijosIzquierdos,
@@ -68,6 +70,7 @@ export const menuItems = [
         text: "postOrder",
         fn: postOrder,
       },
+
       {
         text: "contarHijosIzquierdos",
         fn: contarHijosIzquierdos,
@@ -84,6 +87,11 @@ export const menuItems = [
         text: "contarCantidadNodos",
         fn: contarCantidadNodos,
       },
+    ],
+  },
+  {
+    title: "Menu 2",
+    items: [
       {
         text: "insertar",
         fn: insertar,
@@ -91,6 +99,14 @@ export const menuItems = [
       {
         text: "eliminar",
         fn: eliminar,
+      },
+      {
+        text: "construirPreOrdenInOrden",
+        fn: construirPreOrdenInOrden,
+      },
+      {
+        text: "construirPostOrdenInOrden",
+        fn: construirPostOrdenInOrden,
       },
       {
         text: "mostrar",

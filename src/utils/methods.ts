@@ -73,8 +73,35 @@ export const postOrder = () => {
   );
 };
 
-// "construirPreOrdenAInOrden",
-// "construirPostOrdenAInOrden",
+const parseList = (str: string) => {
+  return str
+    .replace(/[\\[\]]/g, "")
+    .split(",")
+    .map((number) => {
+      return { key: Number(number), value: 0 };
+    });
+};
+
+export const construirPreOrdenInOrden = async () => {
+  const response1 = await promptSwal("preOrderList");
+  if (!response1.isConfirmed) return;
+  const response2 = await promptSwal("inOrderList");
+  if (!response2.isConfirmed) return;
+  const preOrderList = parseList(response1.value);
+  const inOrderList = parseList(response2.value);
+  tree.setRoot(null);
+  tree.rebuildPreOrderInOrder(preOrderList, inOrderList);
+};
+export const construirPostOrdenInOrden = async () => {
+  const response1 = await promptSwal("postOrderList");
+  if (!response1.isConfirmed) return;
+  const response2 = await promptSwal("inOrderList");
+  if (!response2.isConfirmed) return;
+  const postOrderList = parseList(response1.value);
+  const inOrderList = parseList(response2.value);
+  tree.setRoot(null);
+  tree.rebuildPostOrderInOrder(postOrderList, inOrderList);
+};
 
 export const contarHijosIzquierdos = () => {
   messageSwal(tree.countLeftChildren().toString());
@@ -86,26 +113,30 @@ export const contarHijosDerechos = () => {
 
 export const todosLosNodosTienen2Hijos = async () => {
   const nivel = await promptSwal("nivel");
+  if (!nivel.isConfirmed) return;
   messageSwal(nivel.value.toString());
-  tree.allNodesHaveTwoChildrenInLevel(parseInt(nivel.value));
+  tree.allNodesHaveTwoChildrenInLevel(Number(nivel.value));
 };
 
 export const contarCantidadNodos = async () => {
   const nivel = await promptSwal("nivel");
+  if (!nivel.isConfirmed) return;
   messageSwal(nivel.value.toString());
-  tree.countNodesInLevel(parseInt(nivel.value));
+  tree.countNodesInLevel(Number(nivel.value));
 };
 
 export const insertar = async () => {
   const numero = await promptSwal("numero");
+  if (!numero.isConfirmed) return;
   messageSwal(numero.value.toString());
-  tree.insert({ key: parseInt(numero.value), value: 0 });
+  tree.insert({ key: Number(numero.value), value: 0 });
 };
 
 export const eliminar = async () => {
   const numero = await promptSwal("numero");
+  if (!numero.isConfirmed) return;
   messageSwal(numero.value.toString());
-  tree.delete(parseInt(numero.value));
+  tree.delete(Number(numero.value));
 };
 
 export const mostrar = () => {

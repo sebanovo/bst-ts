@@ -42,7 +42,7 @@ export default function TreeView() {
       renderCustomNodeElement={NodeView}
       translate={{
         x: window.innerWidth / 2,
-        y: window.innerHeight / 3,
+        y: window.innerHeight / Math.PI,
       }}
       collapsible={false}
       pathFunc={"straight"} // ("diagonal" | "elbow" | "straight" | "step")
